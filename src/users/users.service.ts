@@ -5,12 +5,15 @@ import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoggerService } from 'src/logger/logger.service';
+import { Role } from './entities/role.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Role)
+    private readonly roleRepository: Repository<Role>,
     private readonly logger: LoggerService,
   ) {}
 
@@ -55,4 +58,20 @@ export class UsersService {
     this.logger.log(`User with ID ${id} deleted`);
     return { message: `User with ID ${id} deleted successfully` };
   }
+
+  async assignRole(userId: number, roleId: number): Promise<User> {
+  const user = await this.userRepository.findOne({
+    where: { id: userId },
+    relations: { roles: true },
+  });
+  if (!user) {
+    throw new NotFoundException(`User with ID ${userId} not found`);
+  }
+  const role = await this.roleRepository.findOne({ where: { id: roleId } });
+  if (!role) {
+    throw new NotFoundException(`Role with ID ${roleId} not found`);
+  }
+  user.roles = [...user.roles, role];
+  return await this.userRepository.save(user);
+}
 }

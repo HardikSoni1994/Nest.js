@@ -45,6 +45,14 @@ export class UsersController {
     return await this.usersService.findOne(id);
   }
 
+  @Post(':userId/roles/:roleId')
+  async assignRole(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Param('roleId', ParseIntPipe) roleId: number, 
+  ) {
+    return await this.usersService.assignRole(userId, roleId)
+  }
+
   @Patch(':id') // PATCH /users/:id
   async update(
     @Param('id', ParseIntPipe) id: number,
