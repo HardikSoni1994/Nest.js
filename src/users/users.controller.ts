@@ -25,9 +25,9 @@ export class UsersController {
 
   @Post() // POST /users
   @HttpCode(HttpStatus.CREATED)
-  create (
+  async create (
     @Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+    return await this.usersService.create(createUserDto);
   }
 
   @Get('me')
@@ -36,25 +36,25 @@ export class UsersController {
   }
 
   @Get() // GET /users
-  findAll(@Query('name') name?: string) {
-    return this.usersService.findAll(name);
+  async findAll(@Query('name') name?: string) {
+    return await this.usersService.findAll(name);
   }
 
   @Get(':id') // GET /user/:id
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.usersService.findOne(id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.usersService.findOne(id);
   }
 
   @Patch(':id') // PATCH /users/:id
-  update(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
+    return await this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id') // DELETE /users/:id
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.usersService.remove(id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return await this.usersService.remove(id);
   }
 }
