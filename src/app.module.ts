@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostsModule } from './posts/posts.module';
 import { RolesModule } from './roles/roles.module';
 import * as dotenv from 'dotenv';
+import { MongooseModule } from '@nestjs/mongoose';
+import { BlogModule } from './blog/blog.module';
 dotenv.config();
 
 @Module({
@@ -20,9 +22,11 @@ dotenv.config();
   entities: [__dirname + '/**/*.entity{.ts,.js}'],
   synchronize: false,
 }),
+  MongooseModule.forRoot(process.env.MONGO_URI as string),
   UsersModule,
   PostsModule,
-  RolesModule,],
+  RolesModule,
+  BlogModule,],
   controllers: [AppController],
   providers: [AppService],
 })
